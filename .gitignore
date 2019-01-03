@@ -1,0 +1,12 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/workspace.xml
+common/target/
+dao/target/
+manager-web/target/
+pojo/target/
+sellergoods-interface/target/
+sellergoods-service/target/
+shop-web/src/main/java/
+shop-web/target/
+src/
+target/
