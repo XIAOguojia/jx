@@ -109,9 +109,4 @@ public class BrandController {
         return brandService.findPages(brand,page,size);
     }
 
-    @RequestMapping("/test.do")
-    public String test(){
-        System.out.println(brandService);
-        return "TEST!!!!";
-    }
 }
