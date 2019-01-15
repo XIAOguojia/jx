@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.pinyougou.mapper.TbSpecificationMapper" >
-  <resultMap id="BaseResultMap" type="com.pinyougou.pojo.TbSpecification" >
+<mapper namespace="com.jx.mapper.TbSpecificationMapper" >
+  <resultMap id="BaseResultMap" type="com.jx.pojo.TbSpecification" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="spec_name" property="specName" jdbcType="VARCHAR" />
   </resultMap>
@@ -66,7 +66,7 @@
   <sql id="Base_Column_List" >
     id, spec_name
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pinyougou.pojo.TbSpecificationExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jx.pojo.TbSpecificationExample" >
     select
     <if test="distinct" >
       distinct
@@ -90,20 +90,20 @@
     delete from tb_specification
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.pinyougou.pojo.TbSpecificationExample" >
+  <delete id="deleteByExample" parameterType="com.jx.pojo.TbSpecificationExample" >
     delete from tb_specification
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.pinyougou.pojo.TbSpecification" >
+  <insert id="insert" parameterType="com.jx.pojo.TbSpecification" >
   	<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
 		SELECT LAST_INSERT_ID() AS id
 	</selectKey>
     insert into tb_specification (id, spec_name)
     values (#{id,jdbcType=BIGINT}, #{specName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.pinyougou.pojo.TbSpecification" >
+  <insert id="insertSelective" parameterType="com.jx.pojo.TbSpecification" >
     insert into tb_specification
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -122,7 +122,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.pinyougou.pojo.TbSpecificationExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jx.pojo.TbSpecificationExample" resultType="java.lang.Integer" >
     select count(*) from tb_specification
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -150,7 +150,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.pinyougou.pojo.TbSpecification" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jx.pojo.TbSpecification" >
     update tb_specification
     <set >
       <if test="specName != null" >
@@ -159,7 +159,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.pinyougou.pojo.TbSpecification" >
+  <update id="updateByPrimaryKey" parameterType="com.jx.pojo.TbSpecification" >
     update tb_specification
     set spec_name = #{specName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

@@ -4,6 +4,7 @@ import com.jx.pojo.TbBrand;
 import entity.PageResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by intellij IDEA
@@ -58,4 +59,10 @@ public interface BrandService {
      * @return
      */
     PageResult findPages(TbBrand brand,int pageNum,int pageSize);
+
+    /**
+     * 品牌下拉列表
+     * @return
+     */
+    List<Map> selectOptionList();
 }

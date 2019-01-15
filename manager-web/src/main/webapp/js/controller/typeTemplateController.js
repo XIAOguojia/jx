@@ -1,5 +1,5 @@
  //控制层 
-app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemplateService){	
+app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemplateService,brandService,specificationService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -10,7 +10,7 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemp
 				$scope.list=response;
 			}			
 		);
-	}    
+	};
 	
 	//分页
 	$scope.findPage=function(page,rows){			
@@ -20,16 +20,22 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemp
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
+	};
 	
 	//查询实体 
 	$scope.findOne=function(id){				
 		typeTemplateService.findOne(id).success(
 			function(response){
-				$scope.entity= response;					
-			}
+				$scope.entity= response;
+
+                // 从数据库中查询出来的是字符串，我们必须将其转换为json对象才能实现信息的回显。
+                $scope.entity.brandIds=  JSON.parse($scope.entity.brandIds);//转换品牌列表
+                $scope.entity.specIds=  JSON.parse($scope.entity.specIds);//转换规格列表
+                $scope.entity.customAttributeItems= JSON.parse($scope.entity.customAttributeItems);//转换扩展属性
+
+            }
 		);				
-	}
+	};
 	
 	//保存 
 	$scope.save=function(){				
@@ -49,7 +55,7 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemp
 				}
 			}		
 		);				
-	}
+	};
 	
 	 
 	//批量删除 
@@ -62,7 +68,7 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemp
 				}						
 			}		
 		);				
-	}
+	};
 	
 	$scope.searchEntity={};//定义搜索对象 
 	
@@ -74,6 +80,39 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemp
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
-    
-});	
+	};
+
+    $scope.brandList={data:[]};//品牌列表
+
+	//品牌下拉列表
+    $scope.findBrandList=function () {
+        brandService.selectOptionList().success(
+            function (response) {
+                $scope.brandList={data:response};
+            }
+        )
+    };
+
+    //规格列表
+    $scope.specList={data:[]};
+
+    //规格下拉列表
+    $scope.findSpecList=function () {
+        specificationService.selectOptionList().success(
+            function (response) {
+                $scope.specList={data:response};
+            }
+        )
+    };
+
+    //新增扩展属性行
+    $scope.addTableRow = function () {
+        $scope.entity.customAttributeItems.push({});
+    };
+
+    //删除扩展属性行
+    $scope.delTableRow = function (index) {
+        $scope.entity.customAttributeItems.splice(index,1);
+    };
+
+});

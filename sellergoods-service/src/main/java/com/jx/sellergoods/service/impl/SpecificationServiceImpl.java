@@ -1,6 +1,7 @@
 package com.jx.sellergoods.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.jx.grouppojo.Specification;
 import com.jx.mapper.TbSpecificationOptionMapper;
@@ -144,6 +145,15 @@ public class SpecificationServiceImpl implements SpecificationService {
 
         Page<TbSpecification> page = (Page<TbSpecification>) specificationMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * 规格下拉列表
+     * @return
+     */
+    @Override
+    public List<Map> selectOptionList() {
+        return specificationMapper.selectOptionList();
     }
 
 }
