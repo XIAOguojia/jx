@@ -5,7 +5,7 @@
 
     <dubbo:protocol name="dubbo" port="20881"></dubbo:protocol>
 	<dubbo:application name="jx-sellergoods-service"/>
-    <dubbo:registry address="zookeeper://192.168.25.137:2181"/>
+    <dubbo:registry address="zookeeper://192.168.25.139:2181"/>
     <dubbo:annotation package="com.jx.sellergoods.service.impl" />
    
    
