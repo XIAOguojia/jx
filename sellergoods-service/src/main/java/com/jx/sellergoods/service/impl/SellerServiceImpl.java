@@ -1,4 +1,5 @@
 package com.jx.sellergoods.service.impl;
+import java.util.Date;
 import java.util.List;
 
 import com.jx.pojo.TbSellerExample;
@@ -47,7 +48,11 @@ public class SellerServiceImpl implements SellerService {
 	 */
 	@Override
 	public void add(TbSeller seller) {
-		sellerMapper.insert(seller);		
+		//设置状态
+	    seller.setStatus("0");
+		//申请日期
+        seller.setCreateTime(new Date());
+	    sellerMapper.insert(seller);
 	}
 
 	

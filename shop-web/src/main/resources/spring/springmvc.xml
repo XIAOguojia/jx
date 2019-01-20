@@ -29,4 +29,5 @@
 
 	<dubbo:annotation package="com.jx.shop.controller" />
 
+	<context:component-scan base-package="com.jx.shop.controller"/>
 </beans>
