@@ -1,4 +1,5 @@
 package com.jx.manager.controller;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -79,8 +80,11 @@ public class SellerController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbSeller findOne(String id){
-		return sellerService.findOne(id);		
+	public TbSeller findOne(String id) throws UnsupportedEncodingException {
+	    //进行编码转换，否则会出现id为乱码的情况，无法查找对应实体
+        id = new String(id.getBytes("ISO-8859-1"), "utf-8");
+
+		return sellerService.findOne(id);
 	}
 	
 	/**
@@ -99,7 +103,7 @@ public class SellerController {
 		}
 	}
 	
-		/**
+	/**
 	 * 查询+分页
 	 * @param seller
 	 * @param page
@@ -110,5 +114,23 @@ public class SellerController {
 	public PageResult search(@RequestBody TbSeller seller, int page, int rows  ){
 		return sellerService.findPage(seller, page, rows);		
 	}
-	
+
+    /**
+     * 修改商家状态
+     * @param sellerId
+     * @param status
+     * @return
+     */
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(String sellerId,String status){
+        try {
+            //进行编码转换，否则会出现id为乱码的情况，无法查找对应实体
+            sellerId = new String(sellerId.getBytes("ISO-8859-1"), "utf-8");
+            sellerService.updateStatus(sellerId,status);
+            return new Result(true,"修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"修改失败");
+        }
+    }
 }

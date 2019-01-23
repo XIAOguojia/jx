@@ -23,13 +23,14 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 	}
 	
 	//查询实体 
-	$scope.findOne=function(id){				
+	$scope.findOne=function(id){
 		sellerService.findOne(id).success(
 			function(response){
+
 				$scope.entity= response;					
 			}
 		);				
-	}
+	};
 	
 	//保存 
 	$scope.save=function(){				
@@ -74,6 +75,19 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
-    
-});	
+	};
+
+
+    //修改商家状态
+    $scope.updateStatus=function(sellerId,status){
+        sellerService.updateStatus(sellerId,status).success(
+            function(response){
+                if (response.success){
+                    $scope.reloadList();
+                }else {
+                    alert(response.message);
+                }
+            }
+        );
+    };
+});
