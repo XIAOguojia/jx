@@ -64,19 +64,19 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
             }
         );
     };
-	 
-	//批量删除 
-	$scope.dele=function(){			
-		//获取选中的复选框			
+
+	//批量删除
+	$scope.dele=function(){
+		//获取选中的复选框
 		sellerService.dele( $scope.selectIds ).success(
 			function(response){
 				if(response.success){
 					$scope.reloadList();//刷新列表
-				}						
-			}		
-		);				
+				}
+			}
+		);
 	}
-	
+
 	$scope.searchEntity={};//定义搜索对象 
 	
 	//搜索

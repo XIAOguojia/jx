@@ -26,8 +26,8 @@
 	<!-- 引用dubbo 服务 -->
 	<dubbo:application name="jx-shop-web" />
 	<dubbo:registry address="zookeeper://192.168.25.139:2181"/>
-
 	<dubbo:annotation package="com.jx.shop.controller" />
+
 
 	<context:component-scan base-package="com.jx.shop.controller"/>
 </beans>

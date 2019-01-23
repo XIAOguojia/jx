@@ -16,11 +16,11 @@ app.service('sellerService',function($http){
 	//增加 
 	this.add=function(entity){
 		return  $http.post('../seller/add.do',entity );
-	}
+	};
 	//修改 
 	this.update=function(entity){
 		return  $http.post('../seller/update.do',entity );
-	}
+	};
 	//删除
 	this.dele=function(ids){
 		return $http.get('../seller/delete.do?ids='+ids);
