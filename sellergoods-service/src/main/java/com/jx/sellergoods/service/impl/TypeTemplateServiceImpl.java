@@ -1,6 +1,7 @@
 package com.jx.sellergoods.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.jx.pojo.TbTypeTemplateExample;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +107,15 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 
         Page<TbTypeTemplate> page = (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * 列表数据
+     * @return
+     */
+    @Override
+    public List<Map> selectOptionList() {
+        return typeTemplateMapper.selectOptionList();
     }
 
 }
