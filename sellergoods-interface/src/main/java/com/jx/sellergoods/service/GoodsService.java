@@ -1,5 +1,7 @@
 package com.jx.sellergoods.service;
 import java.util.List;
+
+import com.jx.grouppojo.Goods;
 import com.jx.pojo.TbGoods;
 
 import entity.PageResult;
@@ -27,9 +29,9 @@ public interface GoodsService {
 	/**
 	 * 增加
 	*/
-	public void add(TbGoods goods);
-	
-	
+	public void add(Goods goods);
+
+
 	/**
 	 * 修改
 	 */
