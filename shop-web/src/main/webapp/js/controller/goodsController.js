@@ -1,5 +1,5 @@
 //控制层
-app.controller('goodsController', function ($scope, $controller, goodsService, uploadService, itemCatService) {
+app.controller('goodsController', function ($scope, $controller, goodsService, uploadService, itemCatService, typeTemplateService) {
 
     $controller('baseController', {$scope: $scope});//继承
 
@@ -109,7 +109,9 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
         )
     };
 
-    $scope.entity = {goods: {}, goodsDesc: {itemImages: []}};//定义页面实体结构
+    //定义页面实体结构
+    $scope.entity = {goods: {}, goodsDesc: {itemImages: [], specificationItems: []}};
+
     //添加图片列表
     $scope.add_image_entity = function () {
         $scope.entity.goodsDesc.itemImages.push($scope.image_entity);
@@ -159,4 +161,47 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
             }
         )
     })
+
+    $scope.$watch('entity.goods.typeTemplateId', function (newValue, oldValue) {
+        typeTemplateService.findOne(newValue).success(
+            function (response) {
+                //获取类型模板
+                $scope.typeTemplate = response;
+                //通过类型模板获得品牌列表
+                $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);//将字符串转换为JSON对象
+                //扩展属性
+                $scope.entity.goodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);//将字符串转换为JSON对象
+            }
+        );
+        //查询规格列表
+        typeTemplateService.findSpecList(newValue).success(
+            function (response) {
+                $scope.specList = response;
+            }
+        )
+    });
+
+    //保存所勾选的规格
+    $scope.updateSpecAttribute = function ($event, name, value) {
+        var object = $scope.searchObjectByKey($scope.entity.goodsDesc.specificationItems, 'attributeName', name);
+        if (object != null) {
+            if ($event.target.checked) {
+                object.attributeValue.push(value);
+            } else {
+                //取消勾选
+                object.attributeValue.splice(object.attributeValue.indexOf(value), 1);//移出选项
+                //如果都取消了，就移出此条记录
+                if (object.attributeValue.length <= 0) {
+                    $scope.entity.goodsDesc.specificationItems.splice(
+                        $scope.entity.goodsDesc.specificationItems.indexOf(object), 1
+                    )
+                }
+
+            }
+
+        } else {
+            $scope.entity.goodsDesc.specificationItems.push({"attributeName": name, "attributeValue": [value]});
+        }
+    };
+
 });	
