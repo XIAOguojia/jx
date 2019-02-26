@@ -204,4 +204,30 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
         }
     };
 
+
+    $scope.createItemList = function () {
+        $scope.entity.itemList = [{spec: {}, price: 0, num: 0, status: '0', isDefault: '0'}];
+        var items = $scope.entity.goodsDesc.specificationItems;
+        for (var i = 0; i < items.length; i++) {
+            $scope.entity.itemList = addColunm($scope.entity.itemList, items[i].attributeName, items[i].attributeValue);
+
+        }
+    };
+
+    //添加列的值
+    addColunm = function (list, colunmName, colunmValues) {
+        //要返回的集合
+        var newList = [];
+        for (var i = 0; i < list.length; i++) {
+            var oldRow = list[i];
+            for (var j = 0; j < colunmValues.length; j++) {
+                //深克隆
+                var newRow = JSON.parse(JSON.stringify(oldRow));
+                newRow.spec[colunmName] = colunmValues[j];
+                newList.push(newRow);
+            }
+        }
+
+        return newList;
+    }
 });	
