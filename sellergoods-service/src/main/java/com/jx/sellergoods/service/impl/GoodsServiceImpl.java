@@ -192,7 +192,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void delete(Long[] ids) {
         for (Long id : ids) {
-            goodsMapper.deleteByPrimaryKey(id);
+            TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+            //逻辑删除
+            tbGoods.setIsDelete("1");
+            goodsMapper.updateByPrimaryKey(tbGoods);
         }
     }
 
@@ -203,7 +206,8 @@ public class GoodsServiceImpl implements GoodsService {
 
         TbGoodsExample example = new TbGoodsExample();
         TbGoodsExample.Criteria criteria = example.createCriteria();
-
+        //没被逻辑删除的数据才展示
+        criteria.andIsDeleteIsNull();
         if (goods != null) {
             if (goods.getSellerId() != null && goods.getSellerId().length() > 0) {
 //                criteria.andSellerIdLike("%" + goods.getSellerId() + "%");
@@ -235,6 +239,20 @@ public class GoodsServiceImpl implements GoodsService {
 
         Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * 批量修改装态
+     * @param ids 要修改的商品ID
+     * @param status 更改后的状态
+     */
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        for (Long id : ids) {
+            TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+            tbGoods.setAuditStatus(status);
+            goodsMapper.updateByPrimaryKey(tbGoods);
+        }
     }
 
 }
