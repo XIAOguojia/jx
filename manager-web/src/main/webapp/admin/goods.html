@@ -25,14 +25,18 @@
     <!--商品服务开始-->
     <script type="text/javascript" src="../js/base_pagination.js"></script>
     <script type="text/javascript" src="../js/service/goodsService.js"></script>
+    <!--引入上传服务-->
+    <script type="text/javascript" src="../js/service/uploadService.js"></script>
     <!--商品分类ID-->
     <script type="text/javascript" src="../js/service/itemCatService.js"></script>
+    <!--品牌分类-->
+    <script type="text/javascript" src="../js/service/typeTemplateService.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
     <script type="text/javascript" src="../js/controller/goodsController.js"></script>
     <!--商品服务结束-->
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="jx" ng-controller="goodsController" ng-init="findItemCatList();searchEntity={auditStatus:'0'}">
+<body class="hold-transition skin-red sidebar-mini" ng-app="jx" ng-controller="goodsController" ng-init="searchEntity={auditStatus:'0'};findItemCatList()">
 <!-- .box-body -->
 
 <div class="box-header with-border">
@@ -48,9 +52,15 @@
         <div class="pull-left">
             <div class="form-group form-inline">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i class="fa fa-trash-o"></i> 删除</button>
-                    <button type="button" class="btn btn-default" title="审核通过" ng-click="updateStatus('1')"><i class="fa fa-check"></i> 审核通过</button>
-                    <button type="button" class="btn btn-default" title="驳回" ng-click="updateStatus('2')"><i class="fa fa-ban"></i> 驳回</button>
+                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i
+                            class="fa fa-trash-o"></i> 删除
+                    </button>
+                    <button type="button" class="btn btn-default" title="审核通过" ng-click="updateStatus('1')"><i
+                            class="fa fa-check"></i> 审核通过
+                    </button>
+                    <button type="button" class="btn btn-default" title="驳回" ng-click="updateStatus('2')"><i
+                            class="fa fa-ban"></i> 驳回
+                    </button>
                     <button type="button" class="btn btn-default" title="刷新"><i class="fa fa-refresh"></i> 刷新</button>
                 </div>
             </div>
@@ -81,6 +91,7 @@
             </tr>
             </thead>
             <tbody>
+
             <tr ng-repeat="entity in list">
                 <td><input type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
                 <td>{{entity.id}}</td>
@@ -93,7 +104,7 @@
                     {{status[entity.auditStatus]}}
                 </td>
                 <td class="text-center">
-                    <a href="goods_edit.html#?id={{entity.id}}" class="btn bg-olive btn-xs">修改</a>
+                    <a href="goods_edit.html#?id={{entity.id}}" class="btn bg-olive btn-xs">详情</a>
                 </td>
             </tr>
             </tbody>
