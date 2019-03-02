@@ -16,6 +16,8 @@
         <module>sellergoods-service</module>
         <module>manager-web</module>
         <module>shop-web</module>
+        <module>content-interface</module>
+        <module>content-service</module>
     </modules>
 
 

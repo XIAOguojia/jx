@@ -7,6 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="common" />
+        <module name="content-interface" />
+        <module name="content-service" />
         <module name="dao" />
         <module name="manager-web" />
         <module name="pojo" />

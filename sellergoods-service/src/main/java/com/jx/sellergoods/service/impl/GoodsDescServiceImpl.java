@@ -11,6 +11,7 @@ import com.jx.pojo.TbGoodsDesc;
 import com.jx.sellergoods.service.GoodsDescService;
 
 import entity.PageResult;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
@@ -18,6 +19,7 @@ import entity.PageResult;
  *
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class GoodsDescServiceImpl implements GoodsDescService {
 
 	@Autowired

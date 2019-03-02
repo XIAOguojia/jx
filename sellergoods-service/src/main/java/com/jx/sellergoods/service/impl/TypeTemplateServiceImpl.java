@@ -14,6 +14,7 @@ import com.jx.mapper.TbTypeTemplateMapper;
 import com.jx.sellergoods.service.TypeTemplateService;
 
 import entity.PageResult;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
@@ -21,6 +22,7 @@ import entity.PageResult;
  * @author Administrator
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class TypeTemplateServiceImpl implements TypeTemplateService {
 
     @Autowired

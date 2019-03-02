@@ -5,12 +5,13 @@
     <session id="-2014553024">
       <usages-collector id="statistics.spring.core.usages.trigger">
         <counts>
-          <entry key="fixes.SpringFacetInspection.AddFacetFix" value="2" />
+          <entry key="fixes.SpringFacetInspection.AddFacetFix" value="3" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/content-service" />
     <file type="web" url="file://$PROJECT_DIR$/manager-web" />
     <file type="web" url="file://$PROJECT_DIR$/sellergoods-service" />
     <file type="web" url="file://$PROJECT_DIR$/shop-web" />
