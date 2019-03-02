@@ -77,15 +77,13 @@ app.controller('goodsController', function ($scope, $controller, $location, good
                 if (response.success) {
                     alert('保存成功');
                     $scope.entity = {};
-                    location.href="goods.html";//跳转到商品列表页
+                    location.href = "goods.html";//跳转到商品列表页
                 } else {
                     alert(response.message);
                 }
             }
         );
     };
-
-
 
 
     //批量删除
@@ -267,6 +265,20 @@ app.controller('goodsController', function ($scope, $controller, $location, good
                 for (var i = 0; i < response.length; i++) {
                     $scope.itemCatList[response[i].id] = response[i].name;
                 }
+            }
+        )
+    }
+
+    $scope.upAndDownGoods = function (status) {
+        goodsService.upAndDownGoods($scope.selectIds, status).success(
+            function (response) {
+                if (response.success) {//成功
+                    $scope.reloadList();//刷新列表
+                    $scope.selectIds = [];//清空ID集合
+                } else {
+                    alert(response.message);
+                }
+
             }
         )
     }

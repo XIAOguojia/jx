@@ -269,5 +269,20 @@ app.controller('goodsController', function ($scope, $controller, $location, good
                 }
             }
         )
+    };
+
+    //更改状态
+    $scope.updateStatus=function(status){
+        goodsService.updateStatus($scope.selectIds,status).success(
+            function(response){
+                if(response.success){//成功
+                    $scope.reloadList();//刷新列表
+                    $scope.selectIds=[];//清空ID集合
+                }else{
+                    alert(response.message);
+                }
+            }
+        );
     }
+
 });	

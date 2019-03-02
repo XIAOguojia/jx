@@ -68,6 +68,8 @@ public class GoodsServiceImpl implements GoodsService {
     public void add(Goods goods) {
         //状态：未审核
         goods.getGoods().setAuditStatus("0");
+        //设置已上架
+        goods.getGoods().setIsMarketable("1");
         //插入商品数据
         goodsMapper.insert(goods.getGoods());
         System.out.println(goods.getGoods().getId());
@@ -243,7 +245,8 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * 批量修改装态
-     * @param ids 要修改的商品ID
+     *
+     * @param ids    要修改的商品ID
      * @param status 更改后的状态
      */
     @Override
@@ -254,5 +257,27 @@ public class GoodsServiceImpl implements GoodsService {
             goodsMapper.updateByPrimaryKey(tbGoods);
         }
     }
+
+    /**
+     * 上下架商品
+     *
+     * @param ids    商品ID
+     * @param status 更改后的状态
+     */
+    @Override
+    public void upAndDownGoods(Long[] ids, String status) throws Exception {
+        for (Long id : ids) {
+            TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+            String auditStatus = tbGoods.getAuditStatus();
+            if ("1".equals(auditStatus)) {
+                tbGoods.setIsMarketable(status);
+                goodsMapper.updateByPrimaryKey(tbGoods);
+            }else {
+                System.out.println(auditStatus);
+                throw new Exception("非法操作");
+            }
+        }
+    }
+
 
 }

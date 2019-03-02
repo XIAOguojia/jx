@@ -66,4 +66,11 @@ public interface GoodsService {
      * @param status 更改后的状态
      */
 	void updateStatus(Long[] ids,String status);
+
+    /**
+     * 上下架商品
+     * @param ids 商品ID
+     * @param status 更改后的状态
+     */
+	void upAndDownGoods(Long[] ids,String status) throws Exception;
 }

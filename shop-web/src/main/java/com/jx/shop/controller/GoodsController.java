@@ -137,4 +137,20 @@ public class GoodsController {
         return goodsService.findPage(goods, page, rows);
     }
 
+    /**
+     * 上下架商品
+     * @param ids 商品的ID
+     * @param status 修改后的装态
+     * @return
+     */
+    @RequestMapping("/upAndDownGoods")
+    public Result upAndDownGoods(Long[] ids,String status){
+        try {
+            goodsService.upAndDownGoods(ids,status);
+            return new Result(true,"成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"非法操作");
+        }
+    }
 }
