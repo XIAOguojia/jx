@@ -74,6 +74,7 @@ app.controller('contentCategoryController' ,function($scope,$controller   ,conte
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
+	};
+
     
 });	
