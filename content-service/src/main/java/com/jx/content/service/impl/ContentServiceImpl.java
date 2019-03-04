@@ -13,6 +13,8 @@ import com.jx.pojo.TbContent;
 
 
 import entity.PageResult;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
@@ -20,6 +22,7 @@ import entity.PageResult;
  * @author Administrator
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ContentServiceImpl implements ContentService {
 
     @Autowired
@@ -49,6 +52,8 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public void add(TbContent content) {
         contentMapper.insert(content);
+        //清楚缓存
+        redisTemplate.boundHashOps("content").delete(content.getCategoryId());
     }
 
 
@@ -57,7 +62,16 @@ public class ContentServiceImpl implements ContentService {
      */
     @Override
     public void update(TbContent content) {
+        Long categoryId = contentMapper.selectByPrimaryKey(content.getId()).getCategoryId();
+        //清楚更新前的缓存
+        redisTemplate.boundHashOps("content").delete(categoryId);
+
         contentMapper.updateByPrimaryKey(content);
+        //判断更新前后的分类ID是否相同
+        if (!categoryId.equals(content.getCategoryId())) {
+            //清楚更新后的缓存
+            redisTemplate.boundHashOps("content").delete(content.getCategoryId());
+        }
     }
 
     /**
@@ -77,6 +91,10 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public void delete(Long[] ids) {
         for (Long id : ids) {
+            //删除前清空缓存，否则会无法删除
+            Long categoryId = contentMapper.selectByPrimaryKey(id).getCategoryId();
+            redisTemplate.boundHashOps("content").delete(categoryId);
+
             contentMapper.deleteByPrimaryKey(id);
         }
     }
@@ -112,6 +130,9 @@ public class ContentServiceImpl implements ContentService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 根据广告类型ID查询列表
      *
@@ -120,16 +141,24 @@ public class ContentServiceImpl implements ContentService {
      */
     @Override
     public List<TbContent> findByCategoryId(Long categoryId) {
-        TbContentExample example = new TbContentExample();
-        TbContentExample.Criteria criteria = example.createCriteria();
-        //分类ID
-        criteria.andCategoryIdEqualTo(categoryId);
-        //状态必须有效
-        criteria.andStatusEqualTo("1");
-        //排序
-        example.setOrderByClause("sort_order");
-        List<TbContent> contents = contentMapper.selectByExample(example);
-        return contents;
+        List<TbContent> list = (List<TbContent>) redisTemplate.boundHashOps("content").get(categoryId);
+        if (list == null) {
+            TbContentExample example = new TbContentExample();
+            TbContentExample.Criteria criteria = example.createCriteria();
+            //分类ID
+            criteria.andCategoryIdEqualTo(categoryId);
+            //状态必须有效
+            criteria.andStatusEqualTo("1");
+            //排序
+            example.setOrderByClause("sort_order");
+            list = contentMapper.selectByExample(example);
+            //存入缓存
+            redisTemplate.boundHashOps("content").put(categoryId, list);
+            System.out.println("从数据库中读取");
+        } else {
+            System.out.println("从缓存中读取");
+        }
+        return list;
     }
 
 }
