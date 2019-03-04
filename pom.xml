@@ -18,6 +18,7 @@
         <module>shop-web</module>
         <module>content-interface</module>
         <module>content-service</module>
+        <module>portal-web</module>
     </modules>
 
 

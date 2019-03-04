@@ -12,6 +12,7 @@
         <module name="dao" />
         <module name="manager-web" />
         <module name="pojo" />
+        <module name="portal-web" />
         <module name="sellergoods-interface" />
         <module name="sellergoods-service" />
         <module name="shop-web" />
