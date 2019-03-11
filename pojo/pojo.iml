@@ -19,5 +19,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-solr:1.5.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.solr:solr-solrj:4.10.3" level="project" />
   </component>
 </module>

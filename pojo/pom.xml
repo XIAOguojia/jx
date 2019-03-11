@@ -28,6 +28,11 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-solr</artifactId>
+            <version>1.5.5.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
