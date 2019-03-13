@@ -1,5 +1,7 @@
 package com.jx.pojo;
 
+
+
 import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.solr.core.mapping.Dynamic;
 
@@ -10,7 +12,7 @@ import java.util.Map;
 
 public class TbItem implements Serializable {
     @Field
-    private final ThreadLocal<Long> id = new ThreadLocal<Long>();
+    private Long id;
 
     @Field("item_title")
     private String title;
@@ -19,6 +21,18 @@ public class TbItem implements Serializable {
 
     @Field("item_price")
     private BigDecimal price;
+
+    @Override
+    public String toString() {
+        return "TbItem{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", price=" + price +
+                ", seller='" + seller + '\'' +
+                ", category='" + category + '\'' +
+                ", brand='" + brand + '\'' +
+                '}';
+    }
 
     private Integer stockCount;
 
@@ -63,23 +77,25 @@ public class TbItem implements Serializable {
     @Field("item_seller")
     private String seller;
 
+
     @Dynamic
     @Field("item_spec_*")
     private Map<String,String> specMap;
+
     public Map<String, String> getSpecMap() {
         return specMap;
     }
+
     public void setSpecMap(Map<String, String> specMap) {
         this.specMap = specMap;
     }
 
-
     public Long getId() {
-        return id.get();
+        return id;
     }
 
     public void setId(Long id) {
-        this.id.set(id);
+        this.id = id;
     }
 
     public String getTitle() {

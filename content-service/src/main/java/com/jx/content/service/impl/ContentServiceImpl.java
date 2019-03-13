@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Administrator
  */
-@Service
+@Service(timeout = 3000)
 @Transactional(rollbackFor = Exception.class)
 public class ContentServiceImpl implements ContentService {
 

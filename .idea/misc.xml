@@ -14,6 +14,8 @@
     <file type="web" url="file://$PROJECT_DIR$/content-service" />
     <file type="web" url="file://$PROJECT_DIR$/manager-web" />
     <file type="web" url="file://$PROJECT_DIR$/portal-web" />
+    <file type="web" url="file://$PROJECT_DIR$/search-service" />
+    <file type="web" url="file://$PROJECT_DIR$/search-web" />
     <file type="web" url="file://$PROJECT_DIR$/sellergoods-service" />
     <file type="web" url="file://$PROJECT_DIR$/shop-web" />
   </component>

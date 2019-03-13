@@ -15,6 +15,9 @@
         <module name="manager-web" />
         <module name="pojo" />
         <module name="portal-web" />
+        <module name="search-interface" />
+        <module name="search-service" />
+        <module name="search-web" />
         <module name="sellergoods-interface" />
         <module name="sellergoods-service" />
         <module name="shop-web" />
@@ -22,7 +25,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="pojo" target="1.8" />
+      <module name="pojo" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

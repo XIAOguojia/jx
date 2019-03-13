@@ -74,7 +74,6 @@ public class GoodsServiceImpl implements GoodsService {
         goods.getGoods().setIsMarketable("1");
         //插入商品数据
         goodsMapper.insert(goods.getGoods());
-        int x =1/0;
         //设置ID
         goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());
         //插入商品扩展数据
