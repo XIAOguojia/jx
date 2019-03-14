@@ -45,15 +45,6 @@ public class ImportItem {
             Map<String,String> specMap = JSON.parseObject(item.getSpec(), Map.class);
             item.setSpecMap(specMap);
         }
-
-
-//        for (TbItem item : list) {
-//            Map<String, String> specMap = item.getSpecMap();
-//            Set<String> set = specMap.keySet();
-//            for (String s : set) {
-//                System.out.println(s+"  "+specMap.get(s));
-//            }
-//        }
         /*
          *统一保存
          */
