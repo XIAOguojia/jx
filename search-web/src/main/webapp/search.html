@@ -366,8 +366,8 @@
 											<i>{{item.price}}</i>
 										</strong>
 								</div>
-								<div class="attr">
-									<em>{{item.title}}</em>
+								<div class="attr" ng-bind-html="item.title | trustHtml">
+
 								</div>
 								<div class="cu">
 									<em><span>促</span>满一件可参加超值换购</em>
