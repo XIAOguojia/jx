@@ -1,5 +1,6 @@
 package com.jx.search.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,11 +8,11 @@ import java.util.Map;
 import com.jx.pojo.TbItem;
 import com.jx.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
-import org.springframework.data.solr.core.query.result.HighlightEntry;
-import org.springframework.data.solr.core.query.result.HighlightPage;
-import org.springframework.data.solr.core.query.result.ScoredPage;
+import org.springframework.data.solr.core.query.result.*;
 import com.alibaba.dubbo.config.annotation.Service;
 
 
@@ -36,7 +37,66 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //1、查询列表以及高亮显示
         map.putAll(searchByKeyWordsAndHighLight(searchMap));
 
+        //2、查询分类列表
+        List<String> list = searchCategoryList(searchMap);
+        map.put("categoryList",list);
+
+        //3、查询品牌和规格列表
+        //选第一个名称作为查询的名称
+        if(list.size()>0){
+            map.putAll(searchBrandAndSpec(list.get(0)));
+        }
+
         return map;
+    }
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    /**
+     * 查询品牌和规格列表
+     * @param category 分类名称
+     * @return
+     */
+    private Map searchBrandAndSpec(String category){
+        Map map = new HashMap();
+        //获取模板ID
+        Long id = (Long) redisTemplate.boundHashOps("itemCat").get(category);
+        if (id!=null){
+            //根据模板ID查询品牌列表,并放入map中
+            map.put("brandList",redisTemplate.boundHashOps("brandList").get(id));
+            //根据模板ID查询规格列表,并放入map中
+            map.put("specList",redisTemplate.boundHashOps("specList").get(id));
+        }
+        return map;
+    }
+    /**
+     * 查询分类列表
+     * @param searchMap
+     * @return
+     */
+    private List<String> searchCategoryList(Map searchMap){
+        List<String> list = new ArrayList<>();
+        Query query = new SimpleQuery("*:*");
+        //按照关键字查询
+        Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
+        query.addCriteria(criteria);
+        //设置分组选项
+        GroupOptions groupOptions = new GroupOptions().addGroupByField("item_category");
+        query.setGroupOptions(groupOptions);
+        //得到分组页
+        GroupPage<TbItem> groupPage = solrTemplate.queryForGroupPage(query, TbItem.class);
+        //得到分组结果集
+        GroupResult<TbItem> itemCategory = groupPage.getGroupResult("item_category");
+        //得到分组结果入口页
+        Page<GroupEntry<TbItem>> groupEntries = itemCategory.getGroupEntries();
+        //得到分组入口集合
+        List<GroupEntry<TbItem>> content = groupEntries.getContent();
+        for (GroupEntry<TbItem> entry : content) {
+            //将分组结果的名称封装到返回值中
+            list.add(entry.getGroupValue());
+        }
+        return list;
     }
 
     /**

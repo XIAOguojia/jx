@@ -14,6 +14,7 @@ import com.jx.mapper.TbTypeTemplateMapper;
 import com.jx.sellergoods.service.TypeTemplateService;
 
 import entity.PageResult;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -84,6 +85,8 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         }
     }
 
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public PageResult findPage(TbTypeTemplate typeTemplate, int pageNum, int pageSize) {
@@ -109,7 +112,31 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         }
 
         Page<TbTypeTemplate> page = (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(example);
+        //存入数据到缓存
+        saveToRedis();
+
+
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * 将品牌和规格列表进行缓存
+     */
+    private void saveToRedis() {
+        List<TbTypeTemplate> templates = findAll();
+        for (TbTypeTemplate typeTemplate : templates) {
+            //存储品牌列表
+            List<Map> brandList = JSON.parseArray(typeTemplate.getBrandIds(), Map.class);
+            redisTemplate.boundHashOps("brandList").put(typeTemplate.getId(), brandList);
+            //存储规格列表
+            //根据模板ID查询规格列表
+            List<Map> specList = findSpecList(typeTemplate.getId());
+            redisTemplate.boundHashOps("specList").put(typeTemplate.getId(), specList);
+
+        }
+        System.out.println("更新缓存:商品品牌和规格表");
+
+
     }
 
     /**
@@ -140,9 +167,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             //查询规格选项列表
             TbSpecificationOptionExample example = new TbSpecificationOptionExample();
             TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
-            criteria.andSpecIdEqualTo(new Long( (Integer)map.get("id") ));
+            criteria.andSpecIdEqualTo(new Long((Integer) map.get("id")));
             List<TbSpecificationOption> options = specificationOptionMapper.selectByExample(example);
-            map.put("options",options);
+            map.put("options", options);
         }
         return list;
     }
