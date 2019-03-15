@@ -1,9 +1,6 @@
 package com.jx.search.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.jx.pojo.TbItem;
 import com.jx.search.service.ItemSearchService;
@@ -34,6 +31,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 
         map.put("rows", page.getContent());*/
 
+
         //1、查询列表以及高亮显示
         map.putAll(searchByKeyWordsAndHighLight(searchMap));
 
@@ -42,9 +40,14 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         map.put("categoryList",list);
 
         //3、查询品牌和规格列表
-        //选第一个名称作为查询的名称
-        if(list.size()>0){
-            map.putAll(searchBrandAndSpec(list.get(0)));
+        if (!"".equals(searchMap.get("category"))){
+            //有分类名称则按照分类名称来查
+            map.putAll(searchBrandAndSpec((String) searchMap.get("category")));
+        }else {
+            if (list.size()>0){
+                //选第一个名称作为查询的名称
+                map.putAll(searchBrandAndSpec(list.get(0)));
+            }
         }
 
         return map;
@@ -120,6 +123,31 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //按照关键字查询
         Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
         query.addCriteria(criteria);
+        //按分类过滤查询
+        if (!"".equals(searchMap.get("category"))){
+            Criteria filterCriteria = new Criteria("item_category").is(searchMap.get("category"));
+            FilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
+            query.addFilterQuery(filterQuery);
+        }
+
+        //按品牌过滤查询
+        if (!"".equals(searchMap.get("brand"))){
+            Criteria filterCriteria = new Criteria("item_brand").is(searchMap.get("brand"));
+            SimpleFilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
+            query.addFilterQuery(filterQuery);
+        }
+
+        //按规格过滤查询
+        if(searchMap.get("spec")!=null){
+            Map<String,String> specMap= (Map) searchMap.get("spec");
+            for(String key:specMap.keySet() ){
+                Criteria filterCriteria=new Criteria("item_spec_"+key).is( specMap.get(key) );
+                FilterQuery filterQuery=new SimpleFilterQuery(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
+
+
         HighlightPage<TbItem> highlightPage = solrTemplate.queryForHighlightPage(query, TbItem.class);
         //高亮入口的集合
         List<HighlightEntry<TbItem>> highlightEntryList = highlightPage.getHighlighted();
