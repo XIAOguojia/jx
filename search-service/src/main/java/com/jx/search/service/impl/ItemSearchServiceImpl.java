@@ -55,6 +55,25 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         return map;
     }
 
+    /**
+     * 将数据批量导入到索引库中
+     * @param list 待导入的数据
+     */
+    @Override
+    public void importItemList(List<TbItem> list) {
+        solrTemplate.saveBeans(list);
+        solrTemplate.commit();
+    }
+
+    @Override
+    public void deleteByGoodsIds(List goodsIds) {
+        Query query = new SimpleQuery();
+        Criteria criteria = new Criteria("item_goodsid").in(goodsIds);
+        query.addCriteria(criteria);
+        solrTemplate.delete(query);
+        solrTemplate.commit();
+    }
+
     @Autowired
     private RedisTemplate redisTemplate;
 

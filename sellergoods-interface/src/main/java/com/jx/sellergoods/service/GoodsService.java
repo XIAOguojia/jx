@@ -4,6 +4,7 @@ import java.util.List;
 import com.jx.grouppojo.Goods;
 import com.jx.pojo.TbGoods;
 
+import com.jx.pojo.TbItem;
 import entity.PageResult;
 /**
  * 服务层接口
@@ -73,4 +74,12 @@ public interface GoodsService {
      * @param status 更改后的状态
      */
 	void upAndDownGoods(Long[] ids,String status) throws Exception;
+
+    /**
+     * 根据商品Id和状态查询商品表信息
+     * @param goodsIds 商品Id
+     * @param status 商品状态（必须为通过审核的）
+     * @return
+     */
+	public List<TbItem> findItemListByGoodsIdandStatus(Long[] goodsIds, String status );
 }

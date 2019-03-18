@@ -1,11 +1,11 @@
 package com.jx.sellergoods.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.jx.mapper.*;
 import com.jx.pojo.*;
 import com.jx.grouppojo.Goods;
@@ -273,11 +273,29 @@ public class GoodsServiceImpl implements GoodsService {
             if ("1".equals(auditStatus)) {
                 tbGoods.setIsMarketable(status);
                 goodsMapper.updateByPrimaryKey(tbGoods);
-            }else {
+            } else {
                 System.out.println(auditStatus);
                 throw new Exception("非法操作");
             }
         }
+    }
+
+    /**
+     * 根据商品Id和状态查询商品表信息
+     *
+     * @param goodsIds 商品Id
+     * @param status   商品状态（必须为通过审核的）
+     * @return
+     */
+    @Override
+    public List<TbItem> findItemListByGoodsIdandStatus(Long[] goodsIds, String status) {
+        TbItemExample example = new TbItemExample();
+        TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andGoodsIdIn(Arrays.asList(goodsIds));
+        criteria.andStatusEqualTo(status);
+        return itemMapper.selectByExample(example);
+
+
     }
 
 
