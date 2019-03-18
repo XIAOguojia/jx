@@ -22,7 +22,8 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     @Override
     public Map search(Map searchMap) {
         Map map = new HashMap();
-/*
+
+        /*
         Query query = new SimpleQuery();
         Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
         query.addCriteria(criteria);
@@ -37,14 +38,14 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 
         //2、查询分类列表
         List<String> list = searchCategoryList(searchMap);
-        map.put("categoryList",list);
+        map.put("categoryList", list);
 
         //3、查询品牌和规格列表
-        if (!"".equals(searchMap.get("category"))){
+        if (!"".equals(searchMap.get("category"))) {
             //有分类名称则按照分类名称来查
             map.putAll(searchBrandAndSpec((String) searchMap.get("category")));
-        }else {
-            if (list.size()>0){
+        } else {
+            if (list.size() > 0) {
                 //选第一个名称作为查询的名称
                 map.putAll(searchBrandAndSpec(list.get(0)));
             }
@@ -58,27 +59,30 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 
     /**
      * 查询品牌和规格列表
+     *
      * @param category 分类名称
      * @return
      */
-    private Map searchBrandAndSpec(String category){
+    private Map searchBrandAndSpec(String category) {
         Map map = new HashMap();
         //获取模板ID
         Long id = (Long) redisTemplate.boundHashOps("itemCat").get(category);
-        if (id!=null){
+        if (id != null) {
             //根据模板ID查询品牌列表,并放入map中
-            map.put("brandList",redisTemplate.boundHashOps("brandList").get(id));
+            map.put("brandList", redisTemplate.boundHashOps("brandList").get(id));
             //根据模板ID查询规格列表,并放入map中
-            map.put("specList",redisTemplate.boundHashOps("specList").get(id));
+            map.put("specList", redisTemplate.boundHashOps("specList").get(id));
         }
         return map;
     }
+
     /**
      * 查询分类列表
+     *
      * @param searchMap
      * @return
      */
-    private List<String> searchCategoryList(Map searchMap){
+    private List<String> searchCategoryList(Map searchMap) {
         List<String> list = new ArrayList<>();
         Query query = new SimpleQuery("*:*");
         //按照关键字查询
@@ -124,29 +128,64 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
         query.addCriteria(criteria);
         //按分类过滤查询
-        if (!"".equals(searchMap.get("category"))){
+        if (!"".equals(searchMap.get("category"))) {
             Criteria filterCriteria = new Criteria("item_category").is(searchMap.get("category"));
             FilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
             query.addFilterQuery(filterQuery);
         }
 
         //按品牌过滤查询
-        if (!"".equals(searchMap.get("brand"))){
+        if (!"".equals(searchMap.get("brand"))) {
             Criteria filterCriteria = new Criteria("item_brand").is(searchMap.get("brand"));
             SimpleFilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
             query.addFilterQuery(filterQuery);
         }
 
-        //按规格过滤查询
-        if(searchMap.get("spec")!=null){
-            Map<String,String> specMap= (Map) searchMap.get("spec");
-            for(String key:specMap.keySet() ){
-                Criteria filterCriteria=new Criteria("item_spec_"+key).is( specMap.get(key) );
-                FilterQuery filterQuery=new SimpleFilterQuery(filterCriteria);
+        //按价格过滤查询
+        if (!"".equals(searchMap.get("price"))) {
+            String[] price = ((String) searchMap.get("price")).split("-");
+            //如果区间起点不是0
+            if (!price[0].equals("0")) {
+                Criteria filterCriteria = new Criteria("item_price").greaterThanEqual(price[0]);
+                SimpleFilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+            //如果区间结尾不是*
+            if (!price[1].equals("*")) {
+                Criteria filterCriteria = new Criteria("item_price").lessThanEqual(price[1]);
+                SimpleFilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
                 query.addFilterQuery(filterQuery);
             }
         }
 
+
+        //按规格过滤查询
+        if (searchMap.get("spec") != null) {
+            Map<String, String> specMap = (Map) searchMap.get("spec");
+            for (String key : specMap.keySet()) {
+                Criteria filterCriteria = new Criteria("item_spec_" + key).is(specMap.get(key));
+                FilterQuery filterQuery = new SimpleFilterQuery(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
+
+        //分页查询
+        //页码
+        Integer pageNo = (Integer) searchMap.get("pageNo");
+
+        if (pageNo == null) {
+            //如果为空则默认为第一页
+            pageNo = 1;
+        }
+        //每页记录数
+        Integer pageSize = (Integer) searchMap.get("pageSize");
+        if (pageSize == null) {
+            //如果为空默认为20条记录
+            pageSize = 20;
+        }
+        //从第几条记录开始查询
+        query.setOffset((pageNo - 1) * pageSize);
+        query.setRows(pageSize);
 
         HighlightPage<TbItem> highlightPage = solrTemplate.queryForHighlightPage(query, TbItem.class);
         //高亮入口的集合
@@ -155,13 +194,17 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             //获取实体
             TbItem item = entry.getEntity();
             //判断是否为空
-            if (entry.getHighlights().size()>0 && entry.getHighlights().get(0).getSnipplets().size()>0){
+            if (entry.getHighlights().size() > 0 && entry.getHighlights().get(0).getSnipplets().size() > 0) {
                 //设置名称高亮
                 item.setTitle(entry.getHighlights().get(0).getSnipplets().get(0));
             }
         }
 
-        map.put("rows",highlightPage.getContent());
+        map.put("rows", highlightPage.getContent());
+        //总页数
+        map.put("totalPages", highlightPage.getTotalPages());
+        //总条数
+        map.put("total", highlightPage.getTotalElements());
         return map;
     }
 }

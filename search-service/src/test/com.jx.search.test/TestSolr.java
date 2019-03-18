@@ -32,6 +32,12 @@ public class TestSolr {
     private SolrTemplate solrTemplate;
 
     @Test
+    public void test(){
+        String s = "aca";
+        System.out.println(s.getClass().getSimpleName());
+    }
+
+    @Test
     public void testAdd() {
         TbItem item = new TbItem();
         item.setId(1L);
