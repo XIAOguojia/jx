@@ -1,4 +1,4 @@
-app.controller('searchController', function ($scope, searchService) {
+app.controller('searchController', function ($scope, $location, searchService) {
 
     //搜索
     $scope.search = function () {
@@ -19,7 +19,9 @@ app.controller('searchController', function ($scope, searchService) {
         'spec': {},//按规格搜索
         'price': '',//按价格区间搜索
         'pageNo': 1,//页码
-        'pageSize': 15//页面大小
+        'pageSize': 15,//页面大小
+        'sort': '',//排序方式
+        'sortField': ''//排序字段
     };
 
     //添加搜索项
@@ -101,7 +103,7 @@ app.controller('searchController', function ($scope, searchService) {
 
     //判断当前页是否为第一页
     $scope.isFirstPage = function () {
-        if ($scope.searchMap.pageNo == 1){
+        if ($scope.searchMap.pageNo == 1) {
             return true;
         } else {
             return false;
@@ -110,11 +112,34 @@ app.controller('searchController', function ($scope, searchService) {
 
     //判断当前页是否最后一页
     $scope.isLastPage = function () {
-        if ($scope.searchMap.pageNo == $scope.resultMap.totalPages){
+        if ($scope.searchMap.pageNo == $scope.resultMap.totalPages) {
             return true;
         } else {
             return false;
         }
+    };
+
+    //排序查找
+    $scope.sortSearch = function (sort, sortField) {
+        $scope.searchMap.sort = sort;
+        $scope.searchMap.sortField = sortField;
+        $scope.search();
+    };
+
+    //判断关键字是否为品牌
+    $scope.KeywordsIsBrand = function () {
+        for (var i = 0; i < $scope.resultMap.brandList.length; i++) {
+            if ($scope.searchMap.keywords.indexOf($scope.resultMap.brandList[i].text) >= 0) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    //加载查询字符串
+    $scope.loadkeywords=function(){
+        $scope.searchMap.keywords=  $location.search()['keywords'];
+        $scope.search();
     };
 
 });

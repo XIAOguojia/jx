@@ -18,7 +18,7 @@
 
 </head>
 
-<body ng-app="jx" ng-controller="searchController">
+<body ng-app="jx" ng-controller="searchController" ng-init="loadkeywords()">
 <!-- 头部栏位 -->
 <!--页面顶部-->
 <div id="nav-bottom">
@@ -86,7 +86,8 @@
 
                                     <input type="text" id="autocomplete" ng-model="searchMap.keywords" type="text"
                                            class="input-error input-xxlarge"/>
-                                    <button class="sui-btn btn-xlarge btn-danger" ng-click="searchMap.pageNo=1;search()" type="button">搜索
+                                    <button class="sui-btn btn-xlarge btn-danger" ng-click="searchMap.pageNo=1;search()"
+                                            type="button">搜索
                                     </button>
                                 </div>
                             </form>
@@ -171,10 +172,10 @@
                     {{searchMap.price}}<i class="sui-icon icon-tb-close"></i></li>
             </ul>
             <!--<form class="fl sui-form form-dark">-->
-                <!--<div class="input-control control-right">-->
-                    <!--<input type="text"/>-->
-                    <!--<i class="sui-icon icon-touch-magnifier"></i>-->
-                <!--</div>-->
+            <!--<div class="input-control control-right">-->
+            <!--<input type="text"/>-->
+            <!--<i class="sui-icon icon-touch-magnifier"></i>-->
+            <!--</div>-->
             <!--</form>-->
             <div class="clearfix"></div>
         </div>
@@ -189,12 +190,13 @@
                 </div>
                 <div class="fl ext"></div>
             </div>
-            <div class="type-wrap logo" ng-if="resultMap.brandList!=null && searchMap.brand==''">
+            <div class="type-wrap logo"
+                 ng-if="resultMap.brandList!=null && searchMap.brand==''&& KeywordsIsBrand()==false">
                 <div class="fl key brand">品牌</div>
                 <div class="value logos">
                     <ul class="logo-list">
-                        <li ng-repeat="item in resultMap.brandList"><a href="#"
-                                                                       ng-click="addSearchItem('brand',item.text)">{{item.text}}</a>
+                        <li ng-repeat="item in resultMap.brandList">
+                            <a href="#" ng-click="addSearchItem('brand',item.text)">{{item.text}}</a>
                         </li>
                     </ul>
                 </div>
@@ -296,19 +298,22 @@
                 <div class="navbar-inner filter">
                     <ul class="sui-nav">
                         <li class="active">
-                            <a href="#">综合</a>
+                            <a href="#" ng-click="sortSearch('','')">综合</a>
                         </li>
                         <li>
                             <a href="#">销量</a>
                         </li>
                         <li>
-                            <a href="#">新品</a>
+                            <a href="#" ng-click="sortSearch('DESC','updateTime')">新品</a>
                         </li>
                         <li>
                             <a href="#">评价</a>
                         </li>
                         <li>
-                            <a href="#">价格</a>
+                            <a href="#" ng-click="sortSearch('ASC','price')">价格↑</a>
+                        </li>
+                        <li>
+                            <a href="#" ng-click="sortSearch('DESC','price')">价格↓</a>
                         </li>
                     </ul>
                 </div>

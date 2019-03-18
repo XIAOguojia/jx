@@ -6,6 +6,7 @@ import com.jx.pojo.TbItem;
 import com.jx.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
@@ -125,6 +126,10 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //设置高亮选项
         query.setHighlightOptions(highlightOptions);
         //按照关键字查询
+        //多关键字搜索去除空格
+        String keywords = ((String) searchMap.get("keywords")).trim().replaceAll(" ", "");
+        searchMap.put("keywords", keywords);
+
         Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
         query.addCriteria(criteria);
         //按分类过滤查询
@@ -186,6 +191,23 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //从第几条记录开始查询
         query.setOffset((pageNo - 1) * pageSize);
         query.setRows(pageSize);
+
+        //排序
+        //降序还是升序
+        String sort = (String) searchMap.get("sort");
+        //排序字段
+        String sortField = (String) searchMap.get("sortField");
+        if (sort != null && !"".equals(sort)) {
+            if ("ASC".equals(sort)) {
+                Sort sort1 = new Sort(Sort.Direction.ASC, "item_" + sortField);
+                query.addSort(sort1);
+
+            } else {
+                Sort sort1 = new Sort(Sort.Direction.DESC, "item_" + sortField);
+                query.addSort(sort1);
+            }
+        }
+
 
         HighlightPage<TbItem> highlightPage = solrTemplate.queryForHighlightPage(query, TbItem.class);
         //高亮入口的集合
