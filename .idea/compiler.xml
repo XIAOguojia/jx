@@ -12,6 +12,8 @@
         <module name="content-service" />
         <module name="dao" />
         <module name="manager-web" />
+        <module name="page-interface" />
+        <module name="page-service" />
         <module name="pojo" />
         <module name="portal-web" />
         <module name="search-interface" />

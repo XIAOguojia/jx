@@ -23,6 +23,8 @@
         <module>search-interface</module>
         <module>search-service</module>
         <module>search-web</module>
+        <module>page-interface</module>
+        <module>page-service</module>
     </modules>
 
 

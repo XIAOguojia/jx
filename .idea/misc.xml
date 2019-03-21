@@ -13,6 +13,7 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/content-service" />
     <file type="web" url="file://$PROJECT_DIR$/manager-web" />
+    <file type="web" url="file://$PROJECT_DIR$/page-service" />
     <file type="web" url="file://$PROJECT_DIR$/portal-web" />
     <file type="web" url="file://$PROJECT_DIR$/search-service" />
     <file type="web" url="file://$PROJECT_DIR$/search-web" />

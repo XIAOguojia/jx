@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.jx.grouppojo.Goods;
+import com.jx.page.service.ItemPageService;
 import com.jx.pojo.TbItem;
 import com.jx.search.service.ItemSearchService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -114,6 +115,9 @@ public class GoodsController {
     @Reference
     private ItemSearchService itemSearchService;
 
+    @Reference(timeout = 5000)
+    private ItemPageService itemPageService;
+
     /**
      * 批量修改状态
      *
@@ -142,5 +146,15 @@ public class GoodsController {
             e.printStackTrace();
             return new Result(false, "失败");
         }
+    }
+
+    /**
+     * 测试生成静态页面
+     *
+     * @param goodsId
+     */
+    @RequestMapping("/genItemHtml")
+    public void genItemHtml(Long goodsId) {
+        itemPageService.genItemHtml(goodsId);
     }
 }

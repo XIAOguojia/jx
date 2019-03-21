@@ -6,6 +6,8 @@
     <file url="file://$PROJECT_DIR$/content-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dao" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/manager-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/page-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/page-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/pojo" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/portal-web" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/search-interface" charset="UTF-8" />
