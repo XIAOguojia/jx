@@ -132,7 +132,6 @@ public class GoodsController {
             //审核通过，更新索引库
             if ("1".equals(status)) {
                 List<TbItem> itemListByGoodsIdandStatus = goodsService.findItemListByGoodsIdandStatus(ids, status);
-                System.out.println(itemListByGoodsIdandStatus.size());
                 if (itemListByGoodsIdandStatus.size() > 0) {
                     itemSearchService.importItemList(itemListByGoodsIdandStatus);
                 } else {

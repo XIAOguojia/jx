@@ -84,10 +84,10 @@ public class ItempageServiceImpl implements ItemPageService {
             //按照状态降序，保证第一个为默认
             example.setOrderByClause("is_default desc");
             List<TbItem> itemList = itemMapper.selectByExample(example);
-            for (TbItem item : itemList) {
-                System.out.println(item.getTitle()+"  "+item.getSpec());
-            }
+
             dataModel.put("itemList",itemList);
+
+            System.out.println(pagedir+goodsId+".html");
 
             //创建writer对象
             Writer out =  new FileWriter(pagedir+goodsId+".html");
