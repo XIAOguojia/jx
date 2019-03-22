@@ -187,6 +187,7 @@
                 </div>
             </div>
         </div>
+
         <!--product-detail-->
         <div class="clearfix product-detail">
             <div class="fl aside">

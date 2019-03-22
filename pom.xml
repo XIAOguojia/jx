@@ -25,6 +25,7 @@
         <module>search-web</module>
         <module>page-interface</module>
         <module>page-service</module>
+        <module>page-web</module>
     </modules>
 
 

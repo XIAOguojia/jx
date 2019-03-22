@@ -138,6 +138,9 @@ public class GoodsController {
                 } else {
                     System.out.println("没有明细数据");
                 }
+                for (Long id : ids) {
+                    itemPageService.genItemHtml(id);
+                }
 
             }
 
@@ -148,13 +151,4 @@ public class GoodsController {
         }
     }
 
-    /**
-     * 测试生成静态页面
-     *
-     * @param goodsId
-     */
-    @RequestMapping("/genItemHtml")
-    public void genItemHtml(Long goodsId) {
-        itemPageService.genItemHtml(goodsId);
-    }
 }
