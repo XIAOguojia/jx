@@ -4,9 +4,12 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.jx.mapper.TbGoodsDescMapper;
 import com.jx.mapper.TbGoodsMapper;
 import com.jx.mapper.TbItemCatMapper;
+import com.jx.mapper.TbItemMapper;
 import com.jx.page.service.ItemPageService;
 import com.jx.pojo.TbGoods;
 import com.jx.pojo.TbGoodsDesc;
+import com.jx.pojo.TbItem;
+import com.jx.pojo.TbItemExample;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,7 +46,10 @@ public class ItempageServiceImpl implements ItemPageService {
 
     @Autowired
     private TbItemCatMapper itemCatMapper;
-    
+
+    @Autowired
+    private TbItemMapper itemMapper;
+
     @Override
     public boolean genItemHtml(Long goodsId) {
         try {
@@ -67,6 +74,20 @@ public class ItempageServiceImpl implements ItemPageService {
             dataModel.put("category1Name",category1Name);
             dataModel.put("category2Name",category2Name);
             dataModel.put("category3Name",category3Name);
+
+            TbItemExample example = new TbItemExample();
+            TbItemExample.Criteria criteria = example.createCriteria();
+            //goodsId来查找对应的SKU
+            criteria.andGoodsIdEqualTo(goodsId);
+            //必须为通过审核的商品
+            criteria.andStatusEqualTo("1");
+            //按照状态降序，保证第一个为默认
+            example.setOrderByClause("is_default desc");
+            List<TbItem> itemList = itemMapper.selectByExample(example);
+            for (TbItem item : itemList) {
+                System.out.println(item.getTitle()+"  "+item.getSpec());
+            }
+            dataModel.put("itemList",itemList);
 
             //创建writer对象
             Writer out =  new FileWriter(pagedir+goodsId+".html");
