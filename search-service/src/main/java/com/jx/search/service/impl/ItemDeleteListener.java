@@ -24,9 +24,9 @@ public class ItemDeleteListener implements MessageListener {
         try {
             ObjectMessage objectMessage = (ObjectMessage) message;
             Long[] goodsIds = (Long[]) objectMessage.getObject();
-            System.out.println("ItemDeleteListener监听接收到消息..." + goodsIds);
+//            System.out.println("ItemDeleteListener监听接收到消息..." + goodsIds);
             itemSearchService.deleteByGoodsIds(Arrays.asList(goodsIds));
-            System.out.println("成功删除索引库中的记录");
+//            System.out.println("成功删除索引库中的记录");
         } catch (Exception e) {
             e.printStackTrace();
         }

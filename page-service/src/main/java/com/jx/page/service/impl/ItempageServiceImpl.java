@@ -1,6 +1,5 @@
 package com.jx.page.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.jx.mapper.TbGoodsDescMapper;
 import com.jx.mapper.TbGoodsMapper;
 import com.jx.mapper.TbItemCatMapper;
@@ -14,8 +13,10 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ import java.util.Map;
  * Time:16:52
  */
 
-@Service(timeout = 5000)
+@Service
 public class ItempageServiceImpl implements ItemPageService {
     @Value("${pagedir}")
     private String pagedir;
@@ -62,18 +63,18 @@ public class ItempageServiceImpl implements ItemPageService {
             Map dataModel = new HashMap();
             //商品表数据
             TbGoods goods = goodsMapper.selectByPrimaryKey(goodsId);
-            dataModel.put("goods",goods);
+            dataModel.put("goods", goods);
             //商品扩展表数据
             TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(goodsId);
-            dataModel.put("goodsDesc",tbGoodsDesc);
+            dataModel.put("goodsDesc", tbGoodsDesc);
 
             String category1Name = itemCatMapper.selectByPrimaryKey(goods.getCategory1Id()).getName();
             String category2Name = itemCatMapper.selectByPrimaryKey(goods.getCategory2Id()).getName();
 
             String category3Name = itemCatMapper.selectByPrimaryKey(goods.getCategory3Id()).getName();
-            dataModel.put("category1Name",category1Name);
-            dataModel.put("category2Name",category2Name);
-            dataModel.put("category3Name",category3Name);
+            dataModel.put("category1Name", category1Name);
+            dataModel.put("category2Name", category2Name);
+            dataModel.put("category3Name", category3Name);
 
             TbItemExample example = new TbItemExample();
             TbItemExample.Criteria criteria = example.createCriteria();
@@ -85,12 +86,12 @@ public class ItempageServiceImpl implements ItemPageService {
             example.setOrderByClause("is_default desc");
             List<TbItem> itemList = itemMapper.selectByExample(example);
 
-            dataModel.put("itemList",itemList);
+            dataModel.put("itemList", itemList);
 
             //创建writer对象
-            Writer out =  new FileWriter(pagedir+goodsId+".html");
+            Writer out = new FileWriter(pagedir + goodsId + ".html");
             //输出
-            template.process(dataModel,out);
+            template.process(dataModel, out);
 
             //关闭流
             out.close();
@@ -100,4 +101,18 @@ public class ItempageServiceImpl implements ItemPageService {
             return false;
         }
     }
+
+    @Override
+    public boolean deleteItemHtml(Long[] goodsIds) {
+        try {
+            for (Long goodsId : goodsIds) {
+                new File(pagedir + goodsId + ".html").delete();
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

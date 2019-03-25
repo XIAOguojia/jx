@@ -25,7 +25,7 @@ public class ItemSearchListener implements MessageListener{
 
     @Override
     public void onMessage(Message message) {
-        System.out.println("监听接收到消息...");
+//        System.out.println("监听接收到消息...");
         try {
             TextMessage textMessage=(TextMessage)message;
             String text = textMessage.getText();
@@ -38,7 +38,7 @@ public class ItemSearchListener implements MessageListener{
             }
             //导入
             itemSearchService.importItemList(list);
-            System.out.println("成功导入到索引库");
+//            System.out.println("成功导入到索引库");
         } catch (Exception e) {
             e.printStackTrace();
         }

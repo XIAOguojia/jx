@@ -1,11 +1,9 @@
 package com.jx.manager.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import com.jx.grouppojo.Goods;
-import com.jx.page.service.ItemPageService;
 import com.jx.pojo.TbItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
@@ -90,6 +88,10 @@ public class GoodsController {
 
     @Autowired
     private Destination queueSolrDeleteDestination;
+
+    @Autowired
+    private Destination topicPageDeleteDestination;
+
     /**
      * 批量删除
      *
@@ -102,7 +104,15 @@ public class GoodsController {
             goodsService.delete(ids);
 
 //            itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
-            jmsTemplate.send(queueSolrDestination, new MessageCreator() {
+            //从索引库删除
+            jmsTemplate.send(queueSolrDeleteDestination, new MessageCreator() {
+                @Override
+                public Message createMessage(Session session) throws JMSException {
+                    return session.createObjectMessage(ids);
+                }
+            });
+            //删除静态页面
+            jmsTemplate.send(topicPageDeleteDestination, new MessageCreator() {
                 @Override
                 public Message createMessage(Session session) throws JMSException {
                     return session.createObjectMessage(ids);
@@ -129,14 +139,15 @@ public class GoodsController {
         return goodsService.findPage(goods, page, rows);
     }
 
-    @Reference(timeout = 5000)
-    private ItemPageService itemPageService;
 
     @Autowired
     private JmsTemplate jmsTemplate;
 
     @Autowired
     private Destination queueSolrDestination;
+
+    @Autowired
+    private Destination topicPageDestination;
 
     /**
      * 批量修改状态
@@ -166,9 +177,16 @@ public class GoodsController {
                     System.out.println("没有明细数据");
                 }
 
-                for (Long id : ids) {
-                    itemPageService.genItemHtml(id);
+                for (final Long id : ids) {
+//                    itemPageService.genItemHtml(id);
+                    jmsTemplate.send(topicPageDestination, new MessageCreator() {
+                        @Override
+                        public Message createMessage(Session session) throws JMSException {
+                            return session.createTextMessage(id + "");
+                        }
+                    });
                 }
+
 
             }
 

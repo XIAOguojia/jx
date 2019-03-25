@@ -37,9 +37,13 @@
         <constructor-arg value="jx_queue_solr_delete"/>
     </bean>
 
-    <!--这个是订阅模式  文本信息-->
-    <bean id="topicTextDestination" class="org.apache.activemq.command.ActiveMQTopic">
-        <constructor-arg value="topic_text"/>
+    <!--这个是订阅模式  发送id，生成静态页面-->
+    <bean id="topicPageDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="jx_topic_page"/>
     </bean>
 
+    <!--这个是订阅模式  发送id，删除静态页面-->
+    <bean id="topicPageDeleteDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="jx_topic_page_delete"/>
+    </bean>
 </beans>

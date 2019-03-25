@@ -20,31 +20,33 @@
         <property name="targetConnectionFactory" ref="targetConnectionFactory"/>
     </bean>
 
-    <!--这个是队列目的地，点对点的  文本信息-->
-    <bean id="queueSolrDestination" class="org.apache.activemq.command.ActiveMQQueue">
-        <constructor-arg value="jx_queue_solr"/>
+
+    <!--这个是发布订阅目的地，广播 生成静态页面-->
+    <bean id="topicPageDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="jx_topic_page"/>
     </bean>
 
     <!-- 我的监听类 -->
-    <bean id="itemSearchListener" class="com.jx.search.service.impl.ItemSearchListener"/>
+    <bean id="pageListener" class="com.jx.page.service.impl.PageListener"/>
     <!-- 消息监听容器 -->
     <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="connectionFactory"/>
-        <property name="destination" ref="queueSolrDestination"/>
-        <property name="messageListener" ref="itemSearchListener"/>
+        <property name="destination" ref="topicPageDestination"/>
+        <property name="messageListener" ref="pageListener"/>
     </bean>
 
-    <!--这个是队列目的地，点对点的  文本信息-->
-    <bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">
-        <constructor-arg value="jx_queue_solr_delete"/>
+    <!--这个是发布订阅目的地，广播  删除静态页面-->
+    <bean id="topicPageDeleteDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="jx_topic_page_delete"/>
     </bean>
 
     <!-- 我的监听类 -->
-    <bean id="itemDeleteListener" class="com.jx.search.service.impl.ItemDeleteListener"/>
+    <bean id="pageDeleteListener" class="com.jx.page.service.impl.PageDeleteListener"/>
     <!-- 消息监听容器 -->
     <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-        <property name="connectionFactory" ref="connectionFactory" />
-        <property name="destination" ref="queueSolrDeleteDestination" />
-        <property name="messageListener" ref="itemDeleteListener" />
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destination" ref="topicPageDeleteDestination"/>
+        <property name="messageListener" ref="pageDeleteListener"/>
     </bean>
+
 </beans>
