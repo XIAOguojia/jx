@@ -87,8 +87,6 @@ public class ItempageServiceImpl implements ItemPageService {
 
             dataModel.put("itemList",itemList);
 
-            System.out.println(pagedir+goodsId+".html");
-
             //创建writer对象
             Writer out =  new FileWriter(pagedir+goodsId+".html");
             //输出

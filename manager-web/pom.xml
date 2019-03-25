@@ -140,15 +140,14 @@
         </dependency>
         <dependency>
             <groupId>cn.szu.hh</groupId>
-            <artifactId>search-interface</artifactId>
+            <artifactId>page-interface</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>cn.szu.hh</groupId>
-            <artifactId>page-interface</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.13.4</version>
         </dependency>
     </dependencies>
 
