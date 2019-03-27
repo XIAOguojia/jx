@@ -24,10 +24,10 @@
         <module name="sellergoods-service" />
         <module name="shop-web" />
         <module name="solr-utils" />
+        <module name="user-interface" />
+        <module name="user-service" />
+        <module name="user-web" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="pojo" target="1.7" />
-    </bytecodeTargetLevel>
   </component>
 </project>

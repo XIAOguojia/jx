@@ -26,6 +26,9 @@
         <module>page-interface</module>
         <module>page-service</module>
         <module>page-web</module>
+        <module>user-interface</module>
+        <module>user-web</module>
+        <module>user-service</module>
     </modules>
 
 
