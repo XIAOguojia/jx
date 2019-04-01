@@ -11,6 +11,9 @@
     </session>
   </component>
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/cart-interface" />
+    <file type="web" url="file://$PROJECT_DIR$/cart-service" />
+    <file type="web" url="file://$PROJECT_DIR$/cart-web" />
     <file type="web" url="file://$PROJECT_DIR$/content-service" />
     <file type="web" url="file://$PROJECT_DIR$/manager-web" />
     <file type="web" url="file://$PROJECT_DIR$/page-service" />

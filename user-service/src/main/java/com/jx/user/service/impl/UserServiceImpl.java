@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createSmsCode(final String phone) {
         //1、生成六位的随机数字
-        final String SmsCode = (long) (Math.random() * 1000000) + "";
+        final String SmsCode = (long) (Math.random() * 1000001) + "";
         System.out.println(SmsCode);
         //2、存入Redis缓存
         redisTemplate.boundHashOps("SmsCode").put(phone, SmsCode);

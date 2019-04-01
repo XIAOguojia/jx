@@ -1,5 +1,6 @@
 //控制层
 app.controller('userController', function ($scope, $controller, userService) {
+    $scope.entity=[];
 
     $scope.userRegister = function () {
         if ($scope.entity.username == null||$scope.entity.username==""){
@@ -17,8 +18,15 @@ app.controller('userController', function ($scope, $controller, userService) {
             return;
         }
 
+
+
         userService.add($scope.entity,$scope.smsCode).success(
             function (response) {
+                // if (response.success){
+                //     location.href = "http://localhost:9100/cas/login";
+                // } else {
+                //     alert(response.message);
+                // }
                 alert(response.message);
             })
 

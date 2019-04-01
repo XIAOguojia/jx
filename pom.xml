@@ -29,6 +29,9 @@
         <module>user-interface</module>
         <module>user-web</module>
         <module>user-service</module>
+        <module>cart-interface</module>
+        <module>cart-service</module>
+        <module>cart-web</module>
     </modules>
 
 
