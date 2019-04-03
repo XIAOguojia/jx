@@ -16,6 +16,7 @@
     <file type="web" url="file://$PROJECT_DIR$/cart-web" />
     <file type="web" url="file://$PROJECT_DIR$/content-service" />
     <file type="web" url="file://$PROJECT_DIR$/manager-web" />
+    <file type="web" url="file://$PROJECT_DIR$/order-service" />
     <file type="web" url="file://$PROJECT_DIR$/page-service" />
     <file type="web" url="file://$PROJECT_DIR$/page-web" />
     <file type="web" url="file://$PROJECT_DIR$/portal-web" />

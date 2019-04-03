@@ -32,6 +32,8 @@
         <module>cart-interface</module>
         <module>cart-service</module>
         <module>cart-web</module>
+        <module>order-interface</module>
+        <module>order-service</module>
     </modules>
 
 
