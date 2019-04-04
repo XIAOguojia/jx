@@ -33,7 +33,7 @@
     </beans:bean>
     <beans:bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
         <!--service 配置自身工程的根地址+/login/cas   -->
-        <beans:property name="service" value="http://localhost:9107/login/cas"/>
+        <beans:property name="service" value="http://localhost:9117/login/cas"/>
     </beans:bean>
     <!-- CAS入口点 结束 -->
 
