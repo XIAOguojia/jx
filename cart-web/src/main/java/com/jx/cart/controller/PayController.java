@@ -1,14 +1,18 @@
 package com.jx.cart.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.jx.order.service.OrderService;
 import com.jx.pay.service.WeixiPayService;
+import com.jx.pojo.TbPayLog;
 import entity.Result;
 import org.omg.CORBA.TIMEOUT;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import utils.IdWorker;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -25,11 +29,21 @@ public class PayController {
     @Reference(timeout = 5000)
     private WeixiPayService weixiPayService;
 
+    @Reference
+    private OrderService orderService;
+
     @RequestMapping("/createNative")
     public Map<String, String> createNative() {
-        IdWorker idWorker = new IdWorker();
-        //1分钱用于测试
-        return weixiPayService.createNative(idWorker.nextId() + "", "1");
+        //获取当前用户
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        //获取支付日志
+        TbPayLog payLog = orderService.searchPayLogFromRedis(userId);
+        if (payLog != null) {
+            return weixiPayService.createNative(payLog.getOutTradeNo(), payLog.getTotalFee() + "");
+        } else {
+            return new HashMap<>();
+        }
+
     }
 
     /**
@@ -50,6 +64,9 @@ public class PayController {
             }
             if ("SUCCESS".equals(map.get("trade_state"))) {
                 result = new Result(true, "支付成功");
+                //修改订单状态
+                orderService.updateOrderStatus(out_trade_no, (String) map.get("transaction_id"));
+
                 break;
             }
             //每三秒查询一次订单状态
@@ -59,8 +76,8 @@ public class PayController {
                 e.printStackTrace();
             }
 
-            if (++x > 100){
-                result = new Result(false,"二维码超时");
+            if (++x > 100) {
+                result = new Result(false, "二维码超时");
                 break;
             }
         }
