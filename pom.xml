@@ -34,6 +34,8 @@
         <module>cart-web</module>
         <module>order-interface</module>
         <module>order-service</module>
+        <module>pay-interface</module>
+        <module>pay-service</module>
     </modules>
 
 

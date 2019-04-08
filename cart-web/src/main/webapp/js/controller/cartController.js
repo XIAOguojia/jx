@@ -1,4 +1,4 @@
-app.controller('cartController', function ($scope, cartService) {
+app.controller('cartController', function ($scope, cartService,payService) {
     //查询购物车列表
     $scope.findCartList = function () {
         cartService.findCartList().success(
@@ -73,7 +73,7 @@ app.controller('cartController', function ($scope, cartService) {
                 if (response.success) {
                     //页面跳转
                     if ($scope.order.paymentType == '1') {//如果是微信支付，跳转到支付页面
-                        location.href = "pay.html";
+                         location.href = "pay.html";
                     } else {//如果货到付款，跳转到提示页面
                         location.href = "paysuccess.html";
                     }

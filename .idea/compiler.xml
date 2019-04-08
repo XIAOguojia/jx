@@ -20,6 +20,8 @@
         <module name="page-interface" />
         <module name="page-service" />
         <module name="page-web" />
+        <module name="pay-interface" />
+        <module name="pay-service" />
         <module name="pojo" />
         <module name="portal-web" />
         <module name="search-interface" />
