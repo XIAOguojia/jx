@@ -36,5 +36,10 @@
         <module name="user-web" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="seckill-interface" target="1.7" />
+      <module name="seckill-service" target="1.7" />
+      <module name="seckill-web" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
