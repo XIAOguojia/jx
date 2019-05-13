@@ -10,9 +10,20 @@
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+
+	<script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
+    <!-- 分页组件开始 -->
+    <script src="/plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="/plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
+
+    <script src="/js/base_pagination.js"></script>
+	<script type="text/javascript" src="js/service/loginService.js"></script>
+	<script type="text/javascript" src="js/service/myOrderService.js"></script>
+	<script type="text/javascript" src="js/controller/indexController.js"></script>
 </head>
 
-<body>
+<body ng-app="jx" ng-controller="indexController" ng-init="showName()">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -153,8 +164,8 @@ $(function(){
                     <div class="person-info">
                         <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
                         <div class="person-account">
-                            <span class="name">Michelle</span>
-                            <span class="safe">账户安全</span>
+                            <span class="name">{{username}}</span>
+                            <span class="safe"> <a href="/logout/cas">退出登录 </a></span>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -266,7 +277,8 @@ $(function(){
                                         </tr>
                                     </tbody>
                                 </table>
-
+                                <!-- 分页 -->
+                                <tm-pagination conf="paginationConf"></tm-pagination>
                             </div>
 
                             <div class="choose-order">

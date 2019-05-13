@@ -5,10 +5,12 @@ import com.jx.pojo.TbBrand;
 import com.jx.sellergoods.service.BrandService;
 import entity.PageResult;
 import entity.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +27,13 @@ public class BrandController {
     @Reference
     private BrandService brandService;
 
+    @Autowired
+    private HttpServletResponse response;
+
     @RequestMapping("/findAll.do")
     public List<TbBrand> findAll(){
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         return brandService.findAll();
     }
 

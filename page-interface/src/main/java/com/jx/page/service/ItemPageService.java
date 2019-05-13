@@ -1,5 +1,7 @@
 package com.jx.page.service;
 
+import java.util.Map;
+
 /**
  * Created by intellij IDEA
  * Author:Raven
@@ -20,5 +22,6 @@ public interface ItemPageService {
      * @return
      */
     public boolean deleteItemHtml(Long[] goodsIds);
+
 
 }

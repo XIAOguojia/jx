@@ -111,7 +111,18 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>cn.szu.hh</groupId>
+            <artifactId>pay-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>cn.szu.hh</groupId>
+            <artifactId>order-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
         <!--springSecurity-->
         <dependency>
             <groupId>org.springframework.security</groupId>
